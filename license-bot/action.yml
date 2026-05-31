@@ -1,0 +1,29 @@
+name: 'License Bot'
+description: 'Auto-add SPDX license headers to new source files'
+inputs:
+  license-type:
+    description: 'License type (MIT, Apache-2.0, GPL-3.0)'
+    required: false
+    default: 'MIT'
+  year:
+    description: 'Copyright year'
+    required: false
+    default: '2026'
+  author:
+    description: 'Copyright author'
+    required: true
+outputs: {}
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - run: python ${{ github.action_path }}/license_bot.py ${{ inputs.license-type }} ${{ inputs.year }} "${{ inputs.author }}"
+      shell: bash
+    - uses: peter-evans/create-pull-request@v6
+      with:
+        commit-message: 'chore: add license headers'
+        title: 'Add license headers'
+        branch: license-bot
+        delete-branch: true

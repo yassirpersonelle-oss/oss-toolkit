@@ -1,0 +1,33 @@
+name: 'Keepalive Action'
+description: 'Prevents GitHub from disabling cron-triggered workflows after 60 days of inactivity'
+author: 'yassir'
+
+inputs:
+  auto_push:
+    description: 'Whether to auto-commit and push the keepalive file'
+    required: false
+    default: 'true'
+  commit_message:
+    description: 'Commit message for the keepalive ping'
+    required: false
+    default: 'chore: keepalive ping'
+
+runs:
+  using: 'composite'
+  steps:
+    - run: ${{ github.action_path }}/keepalive.sh
+      shell: bash
+
+    - name: Commit and push keepalive
+      if: ${{ inputs.auto_push == 'true' }}
+      shell: bash
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add .github/keepalive
+        if git diff --cached --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "${{ inputs.commit_message }}"
+          git push
+        fi
