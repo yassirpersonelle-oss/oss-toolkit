@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='test'>
+  <node id='1' lat='45.5' lon='-73.6'>
+    <tag k='highway' v='residential' />
+    <tag k='name' v='Maple Street' />
+  </node>
+  <node id='3' lat='45.7' lon='-73.8'>
+    <tag k='shop' v='cafe' />
+    <tag k='name' v='Blue Bottle' />
+  </node>
+  <way id='10'>
+    <nd ref='1' />
+    <nd ref='3' />
+    <tag k='highway' v='primary' />
+    <tag k='name' v='Main St' />
+    <tag k='lanes' v='4' />
+  </way>
+  <way id='20'>
+    <nd ref='1' />
+    <nd ref='3' />
+    <tag k='building' v='commercial' />
+    <tag k='name' v='Coffee Shop' />
+  </way>
+</osm>

@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='test'>
+  <node id='1' lat='45.5' lon='-73.6'>
+    <tag k='highway' v='residential' />
+    <tag k='name' v='Maple Street' />
+  </node>
+  <node id='2' lat='45.6' lon='-73.7'>
+    <tag k='building' v='yes' />
+    <tag k='name' v='Old Factory' />
+  </node>
+  <way id='10'>
+    <nd ref='1' />
+    <nd ref='2' />
+    <tag k='highway' v='secondary' />
+    <tag k='name' v='Main St' />
+    <tag k='lanes' v='2' />
+  </way>
+</osm>

@@ -1,0 +1,14 @@
+FROM python:3.11
+
+RUN apt-get update && apt-get install -y gcc g++ make python3-dev build-essential wget curl git man-db vim
+
+RUN pip install flask requests numpy pandas
+
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+COPY . /app
+WORKDIR /app
+
+RUN python setup.py build
+
+CMD ["python", "app.py"]

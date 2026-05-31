@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osmChange version='0.6' generator='test'>
+  <action type='create'>
+    <node id='100' lat='45.5' lon='-73.6'>
+      <tag k='highway' v='residential' />
+      <tag k='name' v='New Street' />
+    </node>
+  </action>
+  <action type='modify'>
+    <node id='1' lat='45.5' lon='-73.6'>
+      <tag k='highway' v='tertiary' />
+      <tag k='name' v='Maple Street' />
+    </node>
+  </action>
+  <action type='delete'>
+    <node id='2' lat='45.6' lon='-73.7'>
+      <tag k='building' v='yes' />
+      <tag k='name' v='Old Factory' />
+    </node>
+  </action>
+</osmChange>
