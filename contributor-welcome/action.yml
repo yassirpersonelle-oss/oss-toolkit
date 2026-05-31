@@ -1,0 +1,33 @@
+name: "Contributor Welcome"
+description: "Auto-label good first issues using complexity heuristics and generate CONTRIBUTING.md sections"
+author: "oss-toolkit"
+
+inputs:
+  token:
+    description: "GitHub token (defaults to GITHUB_TOKEN)"
+    required: true
+  label:
+    description: "Label name to apply to qualifying issues"
+    required: false
+    default: "good first issue"
+  dry-run:
+    description: "If true, only report what would be labeled without applying labels"
+    required: false
+    default: "false"
+  generate-contributing:
+    description: "If true, append CONTRIBUTING.md sections to the repo"
+    required: false
+    default: "false"
+
+runs:
+  using: "composite"
+  steps:
+    - run: |
+        python "${{ github.action_path }}/contributor-welcome.py" \
+          --label "${{ inputs.label }}" \
+          ${{ inputs.dry-run == 'true' && '--dry-run' || '' }} \
+          ${{ inputs.generate-contributing == 'true' && '--generate-contributing' || '' }}
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.token }}
+        GITHUB_REPOSITORY: ${{ github.repository }}
