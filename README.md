@@ -1,9 +1,12 @@
 # OSS Toolkit
 
 [![CI](https://github.com/yassirpersonelle-oss/oss-toolkit/actions/workflows/test.yml/badge.svg)](https://github.com/yassirpersonelle-oss/oss-toolkit/actions/workflows/test.yml)
+[![Release](https://img.shields.io/github/v/release/yassirpersonelle-oss/oss-toolkit)](https://github.com/yassirpersonelle-oss/oss-toolkit/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
 [![Issues](https://img.shields.io/github/issues/yassirpersonelle-oss/oss-toolkit)](https://github.com/yassirpersonelle-oss/oss-toolkit/issues)
+[![Discussions](https://img.shields.io/github/discussions/yassirpersonelle-oss/oss-toolkit)](https://github.com/yassirpersonelle-oss/oss-toolkit/discussions)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/yassirpersonelle-oss/oss-toolkit/blob/main/CONTRIBUTING.md)
 
 **30 standalone CLI tools. Zero dependencies. One repo.**
 
