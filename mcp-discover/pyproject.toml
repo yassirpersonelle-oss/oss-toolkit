@@ -1,0 +1,39 @@
+[build-system]
+requires = ["wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "mcp-discover"
+version = "1.0.0"
+description = "Turn any codebase into an MCP server in one command. Auto-discovers functions, routes, and commands — generates MCP config and server wrappers."
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "yassir", email = "oss@toolkit.dev"}
+]
+keywords = ["mcp", "model-context-protocol", "ai", "claude", "codex", "cli", "code-generator"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Code Generators",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+requires-python = ">=3.9"
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/yassirpersonelle-oss/oss-toolkit"
+Repository = "https://github.com/yassirpersonelle-oss/oss-toolkit"
+Issues = "https://github.com/yassirpersonelle-oss/oss-toolkit/issues"
+Changelog = "https://github.com/yassirpersonelle-oss/oss-toolkit/blob/main/mcp-discover/CHANGELOG.md"
+
+[project.scripts]
+mcp-discover = "mcp-discover:main"  # This won't work directly since it's not a package, but serves as metadata

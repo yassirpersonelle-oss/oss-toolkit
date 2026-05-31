@@ -1,146 +1,141 @@
-# MCP Discover
+# mcp-discover
 
-**Turn any repo into an MCP server in one command.**
+> **One command turns any codebase into an MCP server.**
+>
+> Point at any project — Python, TypeScript, Rust, Go — and get a working
+> MCP server config + wrapper with auto-detected functions, type schemas,
+> and entry points. Zero manual configuration.
 
-`mcp-discover` scans a codebase and auto-generates [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server configuration files from the project's functions and API endpoints. Makes any OSS tool MCP-compatible without manual configuration.
+## Why this exists
 
-## Why MCP Matters
+AI coding agents (Claude Code, Cursor, Copilot, OpenCode) all speak MCP.
+But **nobody wants to write MCP config by hand**. Every OSS library has
+functions ready to become tools — mcp-discover finds them automatically.
 
-The Model Context Protocol is trending as the standard way for AI agents (Claude Code, Copilot, Cursor, etc.) to interact with external tools. Instead of each agent requiring custom integrations, MCP provides a universal protocol:
-
-- **AI agents need tool access** — every function, CLI command, or API endpoint is a potential MCP tool
-- **Zero manual config** — point, scan, and your entire codebase becomes an MCP server
-- **Works with any language** — Python, JavaScript, TypeScript, Rust, Go
-
-## Installation
-
-```bash
-# Just the script — no dependencies (stdlib only)
-curl -O https://raw.githubusercontent.com/your-org/mcp-discover/main/mcp-discover.py
-chmod +x mcp-discover.py
-```
-
-## Usage
+## Quick Start
 
 ```bash
-# Scan current directory, write to .mcp/
-python mcp-discover.py
+# Install
+pip install mcp-discover
 
-# Scan a specific project
-python mcp-discover.py --path /path/to/project
+# Scan your project, generate config + working server
+cd your-project/
+mcp-discover
 
-# Output to a custom directory
-python mcp-discover.py -o ./mcp-config/
+# Output directly to stdout for Claude Desktop
+mcp-discover --format claude --stdout | pbcopy  # macOS
+mcp-discover --format claude --stdout | clip     # Windows
 
-# Custom server name
-python mcp-discover.py --name my-tools --path ./my-project
-
-# Force a language (skip auto-detection)
-python mcp-discover.py --lang rust --path ./my-rust-project
-
-# Print config to stdout (pipe to file or clipboard)
-python mcp-discover.py --stdout
-
-# Pipe directly into Claude Desktop config
-python mcp-discover.py --stdout --path ./my-api > ~/.config/claude/claude_desktop_config.json
+# Interactive mode — pick which functions become tools
+mcp-discover --interactive
 ```
 
-## Output
+## How It Works
 
 ```
-.mcp/
-├── mcp.json          # Full MCP server config (claude_desktop_config.json style)
-└── tools/
-    ├── create_user.json    # Individual tool definition
-    ├── delete_post.json
-    └── search_items.json
+┌─────────────────┐      ┌──────────────────┐      ┌─────────────────────┐
+│  Your Codebase   │ ───► │  mcp-discover    │ ───► │  MCP Config +       │
+│                  │      │                  │      │  Working Server     │
+│  ├── src/        │      │  • AST parsing   │      │                     │
+│  │   ├── api.py  │      │  • Type mapping  │      │  ├── .mcp/          │
+│  │   └── db.py   │      │  • Route detect  │      │  │   └── mcp.json   │
+│  └── tests/      │      │  • Entry detect  │      │  └── tools/*.json   │
+└─────────────────┘      └──────────────────┘      └─────────────────────┘
 ```
 
-### `mcp.json` structure
+### Input → Output
 
+**Input** (your existing code):
+```python
+def get_user(user_id: int, include_posts: bool = False) -> dict:
+    """Fetch a user by ID, optionally including their posts."""
+    ...
+```
+
+**Output** (generated MCP tool definition):
 ```json
 {
-  "mcpServers": {
-    "project-name": {
-      "command": "python",
-      "args": ["-m", "project_name"],
-      "env": {},
-      "disabled": false,
-      "autoApprove": [],
-      "tools": [
-        {
-          "name": "get_user",
-          "description": "Fetch a user by ID from the database",
-          "inputSchema": {
-            "type": "object",
-            "properties": {
-              "user_id": { "type": "integer", "description": "" }
-            },
-            "required": ["user_id"]
-          }
-        }
-      ]
-    }
+  "name": "get_user",
+  "description": "Fetch a user by ID, optionally including their posts.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "user_id": { "type": "integer", "description": "" },
+      "include_posts": { "type": "boolean", "description": "" }
+    },
+    "required": ["user_id"]
   }
 }
 ```
 
-Drop the `mcp.json` contents into your `claude_desktop_config.json` or use it with any MCP client.
+## Features
 
-## Supported Patterns
+| Feature | Description |
+|---------|-------------|
+| 🔍 **Auto-discovery** | Finds all functions, routes, CLI commands across 5 languages |
+| 🧠 **Type-aware** | Maps Python/TS/Rust/Go types to JSON Schema automatically |
+| 🗂️ **Entry point detection** | Reads package.json, pyproject.toml, Cargo.toml for correct commands |
+| 📝 **Docstring parsing** | Extracts descriptions from docstrings, JSDoc, /// comments |
+| 🖥️ **Interactive mode** | Select which functions to expose, rename tools on the fly |
+| 🔌 **Claude Desktop ready** | Drop-in output format for Claude Desktop, Cursor, OpenCode |
+| 🚀 **Server generation** | `--generate-server` creates a working stdio MCP server wrapper |
+| 🎯 **Zero dependencies** | Stdlib only — pip install with no extra packages |
 
-### Python
-| Pattern | Detected |
-|---|---|
-| Module-level `def function()` | ✅ |
-| Type-annotated params `def fn(x: str, y: int)` | ✅ |
-| Flask `@app.route()` | ✅ |
-| FastAPI `@router.get()`, `@app.post()` | ✅ |
-| Click `@click.command()` | ✅ |
-| Typer `@app.command()` | ✅ |
-| `async def` functions | ✅ |
-| Docstrings as descriptions | ✅ |
-| `if __name__ == "__main__"` entry points | ✅ |
+## Usage
 
-### JavaScript / TypeScript
-| Pattern | Detected |
-|---|---|
-| `export function` | ✅ |
-| `export const fn = () =>` | ✅ |
-| `exports.fn = function()` | ✅ |
-| `module.exports` | ✅ |
-| Express `app.get()`, `app.post()` | ✅ |
-| Fastify `router.get()` | ✅ |
-| JSDoc `/** ... */` comments | ✅ |
+```
+mcp-discover [OPTIONS]
 
-### Rust
-| Pattern | Detected |
-|---|---|
-| `pub fn` in `lib.rs` / `main.rs` | ✅ |
-| Type parameters (i32, String, bool, Vec) | ✅ |
-| `/// doc comments` | ✅ |
-
-### Go
-| Pattern | Detected |
-|---|---|
-| Exported `func FunctionName()` | ✅ |
-| Methods `func (r *T) Method()` | ✅ |
-| Type inference (int, string, bool) | ✅ |
-| `// line comments` as descriptions | ✅ |
-
-## Adding to Claude Desktop
-
-1. Run `python mcp-discover.py --path /path/to/your/project --stdout`
-2. Copy the output JSON
-3. Merge it into your `claude_desktop_config.json` under the `mcpServers` key
-
-Example with `jq`:
-
-```bash
-python mcp-discover.py --stdout --path ./my-api | jq '.mcpServers' > /tmp/mcp-servers.json
-# Then manually merge into your config
+Options:
+  --path PATH          Project root directory (default: .)
+  --output, -o PATH    Output directory (default: .mcp/)
+  --name NAME          Server name (default: directory name)
+  --lang LANGUAGE      Force language (python|javascript|typescript|rust|go)
+  --format FORMAT      Output format: mcp (default), claude, cursor
+  --generate-server    Also generate a working MCP server wrapper
+  --interactive, -i    Select which functions become tools
+  --exclude PATTERN    Exclude functions matching regex (repeatable)
+  --show-all           Include test and internal functions
+  --stdout             Print to stdout instead of writing files
+  --help               Show help
 ```
 
-## License
+### Language Support
 
-MIT
+| Language | Detection | Route Support | Type Mapping |
+|----------|-----------|---------------|-------------|
+| Python | AST | Flask, FastAPI, Click, Typer | ✅ Full |
+| TypeScript | Regex + AST | Express, Fastify, NestJS | ✅ Full |
+| JavaScript | Regex + AST | Express, Fastify | ✅ Full |
+| Rust | Regex | — | ✅ Primitives |
+| Go | Regex | — | ✅ Primitives |
+
+### Integrating with Claude Desktop
+
+```bash
+# Generate and pipe directly into your Claude config
+mcp-discover --path ./my-api --format claude --stdout > ~/.config/claude/claude_desktop_config.json
+```
+
+### Integrating with Cursor
+
+```bash
+# Cursor expects MCP config at .cursor/mcp.json
+mcp-discover --path ./my-api --format cursor
+```
+
+## Real-world examples
+
+```bash
+# Scan a FastAPI backend
+mcp-discover --path api/ --name "user-service" --generate-server
+
+# Interactive: pick only the 5 functions you want
+mcp-discover --path ./lib --interactive
+
+# Exclude test and internal functions
+mcp-discover --path ./ --exclude "^test_" --exclude "^_"
+
+# Generate Claude Desktop config for a Rust CLI
+mcp-discover --lang rust --format claude --stdout
+```

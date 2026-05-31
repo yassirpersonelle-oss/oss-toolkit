@@ -1,6 +1,15 @@
 # OSS Toolkit
 
+[![CI](https://github.com/yassirpersonelle-oss/oss-toolkit/actions/workflows/test.yml/badge.svg)](https://github.com/yassirpersonelle-oss/oss-toolkit/actions/workflows/test.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
+[![Issues](https://img.shields.io/github/issues/yassirpersonelle-oss/oss-toolkit)](https://github.com/yassirpersonelle-oss/oss-toolkit/issues)
+
+**30 standalone CLI tools. Zero dependencies. One repo.**
+
 A collection of fast, useful open-source CLI tools for developers.
+
+> **Featured:** [mcp-discover](./mcp-discover/) — Turn any codebase into an MCP server in one command. `pip install mcp-discover`
 
 ## General-Purpose Developer Tools
 
