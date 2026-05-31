@@ -42,6 +42,21 @@ A collection of fast, useful open-source CLI tools for developers.
 | **ansible-drift** | DevOps | Generate markdown drift reports from Ansible --check |
 | **vim-doc-gen** | Vim/neovim | Auto-generate :help docs from plugin source code |
 
+## Roblox Developer Tools
+
+| Tool | Description |
+|------|-------------|
+| **rojo-diff** | Validate Rojo project structure against filesystem, catch sync failures |
+| **luau-type-coverage** | Track Luau gradual typing progress across your codebase |
+| **rbx-asset-audit** | Find bloated, unused, and duplicate assets in Roblox place files |
+| **remote-event-logger** | Audit RemoteEvent/RemoteFunction attack surface for exploit prevention |
+| **datastore-debugger** | Local DataStore simulator with transaction history and chaos testing |
+| **rojo-template-scaffold** | Scaffold new Rojo projects with genre-specific templates (obby, RPG, PvP...) |
+| **ui-scale-optimizer** | Detect hardcoded pixel UI sizes that break on mobile devices |
+| **localization-extractor** | Extract hardcoded strings into CSV localization tables |
+| **plugin-hot-reload** | File watcher that auto-reloads Studio plugin code on save |
+| **animation-compressor** | Remove redundant keyframes from Roblox animations to save memory |
+
 ## Usage
 
 Each tool lives in its own directory with a standalone script and README.
@@ -56,4 +71,9 @@ python gitshit/gitshit.py
 python gdext-stub/gdext-stub.py --input my_extension.gdextension
 python migrate-lint/migrate-lint.py --path apps/
 python bib-clean/bib-clean.py --input references.bib
+
+# Roblox tools
+python rojo-diff/rojo-diff.py -p default.project.json
+python remote-event-logger/remote-event-logger.py --path src/
+python luau-type-coverage/luau-type-coverage.py --path src/
 ```
